@@ -1,7 +1,7 @@
 // IMPORTS
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, Linking } from 'react-native';
 
 // COMPONENTE
 export default function App() {
@@ -37,6 +37,12 @@ export default function App() {
       })
   }
 
+//  return Linking.openURL('maps://app?daddr=-12.551215+-55.733780')
+
+const teste = () => {
+  return Linking.openURL('google.navigation:q=-12.551215+-55.733780')
+}
+
   return (
     <View style={styles.container}>
       <View style={styles.card}>
@@ -58,9 +64,10 @@ export default function App() {
             <Text style={styles.texto}>Bairro - {endereco.bairro}</Text>
             <Text style={styles.texto}>Localidade - {endereco.localidade}</Text>
             <Text style={styles.texto}>UF - {endereco.uf}</Text>
+            <Button style={styles.texto} title='TESTE' onPress={teste}/>
           </View>
         )}
-        <StatusBar style="auto" />
+        <StatusBar style="auto"/>
         </View>
     </View>
   );
@@ -69,7 +76,7 @@ export default function App() {
 // ESTILOS
 const styles = StyleSheet.create({
   enderecoCard: { padding: 15, backgroundColor: '#f2f4f3' },
-  card: { backgroundColor: 'white', padding: 15, border, borderColor: '#000' },
+  card: { backgroundColor: 'white', padding: 15, borderColor: '#000' },
   input: { marginVertical: 10, borderColor: '#000', borderWidth: 1 },
   titulo: {
     fontSize: 25,
