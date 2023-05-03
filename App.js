@@ -1,15 +1,31 @@
 // IMPORTS
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, View, Button, Linking } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, Linking} from 'react-native';
+
+//IMPORTANTE chave API google-maps: AIzaSyC7_wOMsigz1kkt-XFuRMJ4FseAWH82Lsk
+//IMPORTANTE requisição:  https://maps.googleapis.com/maps/api/geocode/json?address=C7X8%2BGF&key=AIzaSyC7_wOMsigz1kkt-XFuRMJ4FseAWH82Lsk
+
 
 // COMPONENTE
 export default function App() {
   const [cep, setCep] = useState("")
   const [endereco, setEndereco] = useState(null)
+  const [coord, setCoord] = useState(null)
   const [carregando, setCarregando] = useState(false)
   const [erro, setErro] = useState("")
 
+//Requisição para API do Maps
+  const loc = (obj) => {
+    fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${obj.logradouro} ${obj.bairro} ${obj.localidade}&key=AIzaSyC7_wOMsigz1kkt-XFuRMJ4FseAWH82Lsk`)
+          .then(resposta => resposta.json())
+          .then(obj => {
+            setCoord(obj)
+            setErro("")
+          })
+  }
+
+//Executa a requisição no ViaCep e a requisição do mapa
   const buscarCep = () => {
 
     if (cep.replace("-", "").length != 8) {
@@ -21,12 +37,14 @@ export default function App() {
     fetch(`https://viacep.com.br/ws/${cep.replace("-", "")}/json`)
       .then(resposta => resposta.json())
       .then(obj => {
+        setEndereco(obj)
         if(obj.erro){
           setErro("CEP não encontrado!")
           return
         }
-
-        setEndereco(obj)
+        else{
+          loc(obj)
+        }
         setErro("")
       })
       .catch(() => {
@@ -34,13 +52,17 @@ export default function App() {
       })
       .finally(() => {
         setCarregando(false)
-      })
+      })      
   }
 
-//  return Linking.openURL('maps://app?daddr=-12.551215+-55.733780')
 
-const teste = () => {
-  return Linking.openURL('google.navigation:q=-12.551215+-55.733780')
+//Acessando objeto das coordenadas (console.log(JSON.stringify(coord.results[0].geometry.location.lat))
+//  return IOS: Linking.openURL('maps://app?daddr=${lat}+${long}')    android: Linking.openURL(`google.navigation:q=${lat}+${long}`)
+const map = (lat, long) => {
+  lat = coord.results[0].geometry.location.lat
+  long = coord.results[0].geometry.location.lng
+
+  return Linking.openURL(`google.navigation:q=${lat}+${long}`)
 }
 
   return (
@@ -64,7 +86,7 @@ const teste = () => {
             <Text style={styles.texto}>Bairro - {endereco.bairro}</Text>
             <Text style={styles.texto}>Localidade - {endereco.localidade}</Text>
             <Text style={styles.texto}>UF - {endereco.uf}</Text>
-            <Button style={styles.texto} title='TESTE' onPress={teste}/>
+            <Button style={styles.texto} title='Acessar no Mapa' onPress={map}/>
           </View>
         )}
         <StatusBar style="auto"/>
