@@ -103,7 +103,7 @@ const map = (lat, long) => {
 const styles = StyleSheet.create({
   enderecoCard: { padding: 15, backgroundColor: '#f2f4f3' ,  borderRadius: 20 },
   card: { backgroundColor: 'white', padding: 15, borderColor: '#000',  borderRadius: 20  },
-  input: { marginVertical: 10, borderColor: '#000', borderWidth: 1,  },
+  input: { marginVertical: 10, borderColor: '#000', borderWidth: 1, borderRadius: 3, padding: 5},
   titulo: {
     fontSize: 25,
     color: '#000',
