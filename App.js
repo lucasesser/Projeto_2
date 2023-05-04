@@ -56,13 +56,17 @@ export default function App() {
   }
 
 
-//Acessando objeto das coordenadas (console.log(JSON.stringify(coord.results[0].geometry.location.lat))
-//  return IOS: Linking.openURL('maps://app?daddr=${lat}+${long}')    android: Linking.openURL(`google.navigation:q=${lat}+${long}`)
+const url = (lat, long) => Platform.select({
+  ios: `maps://app?daddr=${lat}+${long}`,
+  android: `google.navigation:q=${lat}+${long}`
+});
+
+//Acessando objeto das coordenadas (console.log(JSON.stringify(coord.results[0].geometry.location))
 const map = (lat, long) => {
   lat = coord.results[0].geometry.location.lat
   long = coord.results[0].geometry.location.lng
 
-  return Linking.openURL(`google.navigation:q=${lat}+${long}`)
+  return Linking.openURL(url(lat, long))
 }
 
   return (
@@ -97,32 +101,37 @@ const map = (lat, long) => {
 
 // ESTILOS
 const styles = StyleSheet.create({
-  enderecoCard: { padding: 15, backgroundColor: '#f2f4f3' },
-  card: { backgroundColor: 'white', padding: 15, borderColor: '#000' },
-  input: { marginVertical: 10, borderColor: '#000', borderWidth: 1 },
+  enderecoCard: { padding: 15, backgroundColor: '#f2f4f3' ,  borderRadius: 20 },
+  card: { backgroundColor: 'white', padding: 15, borderColor: '#000',  borderRadius: 20  },
+  input: { marginVertical: 10, borderColor: '#000', borderWidth: 1,  },
   titulo: {
     fontSize: 25,
     color: '#000',
-    marginBottom: 40
+    marginBottom: 40,
+    fontWeight:'bold'
   },
   texto: {
     fontSize: 18,
     color: '#000'
+    
   },
   erro: {
     marginVertical:12,
     fontSize: 18,
-    color: '#93032e'
+    color: '#93032e', 
+    fontWeight:'bold'
   },
   container: {
     flex: 1,
-    backgroundColor: '#A9BCF5',
+    backgroundColor:  '#232634' ,
     alignItems: 'center',
     justifyContent: 'center',
+    
   },
   botao: {
     padding: 5,
     backgroundColor: "#000",
+    borderRadius: 20 
   },
   image: {
     flex: 1,
